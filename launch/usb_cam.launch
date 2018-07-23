@@ -1,0 +1,7 @@
+<?xml version="1.0"?>
+<launch>
+    <node pkg="usb_cam" type="usb_cam_node.py" name="usb_cam_node" output="screen"/>
+    <node pkg="image_view" type="image_view" name="image_view">
+    	<remap from="image" to="/camera/rgb/image"/> 
+    </node>
+</launch>
