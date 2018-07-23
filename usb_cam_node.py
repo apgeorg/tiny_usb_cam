@@ -11,8 +11,7 @@ if __name__ == "__main__":
     parser.add_argument('--device', '-d', default='/dev/video0', help='Camera device')
     parser.add_argument('--topic',  '-t', default='/camera/rgb/image', help='ROS topic (publish)')
     parser.add_argument('--rate', '-r', default=30, help='Rate [Hz]')
-    #parser.add_argument('--live_view', '-l', action='store_false', help='Activates live view')
-    args = parser.parse_args()
+    args, unknown = parser.parse_known_args()
 
     # Initialize publisher node
     rospy.init_node("usb_cam_node")
