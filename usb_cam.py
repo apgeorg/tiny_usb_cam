@@ -1,40 +1,64 @@
+#!/usr/bin/env python
+
 import cv2
-from cv_bridge import CvBridge
+import threading
 
 class UsbCam(object):
-    def __init__(self, device, live_view_active=True):
-        self.camera = cv2.VideoCapture(device)
-        self.bridge = CvBridge()
-        self.isLiveViewActive = live_view_active
+    def __init__(self, device):
+        self.device = device
+        self.camera = cv2.VideoCapture(self.device)
+        self.width = int(self.camera.get(cv2.CAP_PROP_FRAME_WIDTH))
+        self.height = int(self.camera.get(cv2.CAP_PROP_FRAME_HEIGHT))
+        self.video_recorder = None
+        self.video_recording_active = False
+        self.lock = threading.Lock()
 
-    """
-    def show(self):
-        if self.isLiveViewActive is False or \
-                self.camera is None or \
-                self.camera.isOpened() is False:
-            return
-        while(True):
-            ret, frame = self.camera.read()
-            rgb = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
-            cv2.imshow('Live View', rgb)
+    def is_camera_opened(self):
+        if self.camera and self.camera.isOpened():
+            return True
+        else:
+            print("Unable to read camera feed")
+            return False
 
-        self.close()
-    """
+    def is_video_recorder_opened(self):
+        if self.video_recorder and self.video_recorder.isOpened():
+            return True
+        else:
+            print("Unable to write camera feed")
+            return False
+
+    def start_video_recording(self, filename="output.avi", fps=30.0, resolution=(640, 480)):
+        with self.lock:
+            self.video_recorder = cv2.VideoWriter(filename, cv2.VideoWriter_fourcc('M','J','P','G'), fps, resolution)
+            self.video_recording_active = True
+
+    def stop_video_recording(self):
+        with self.lock:
+            if not self.is_video_recorder_opened():
+                return
+            self.video_recorder.release()
+            self.video_recording_active = False
+
+    def write(self, frame):
+        with self.lock:
+            if not self.is_video_recorder_opened():
+                return
+            self.video_recorder.write(frame)
 
     def capture(self):
-        if self.camera is None or self.camera.isOpened() is False:
+        if not self.is_camera_opened():
             return
         ret, frame = self.camera.read()
-        image_rgb = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
-        return self.bridge.cv2_to_imgmsg(image_rgb, "rgb8")
-        	
+        #image_rgb = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
+        if self.video_recording_active:
+            self.write(frame)
+        return frame
+
     def close(self):
-        if self.camera is None or self.camera.isOpened() is False:
+        if not self.is_camera_opened():
             return
         else:	
             self.camera.release()
-            if self.isLiveViewActive:
-                cv2.destroyAllWindows()
-                self.isLiveViewActive = False
 
-
+    def get_resolution(self):
+        return (self.width, self.height)
