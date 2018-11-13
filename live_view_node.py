@@ -4,7 +4,7 @@ import argparse
 import rospy
 from cv_bridge import CvBridge, CvBridgeError
 from sensor_msgs.msg import Image
-from usb_cam import UsbCam
+from usbcam.usb_cam import UsbCam
 
 class LiveView(object):
     def __init__(self, device, topic_name, rate):
