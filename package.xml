@@ -1,11 +1,11 @@
 <?xml version="1.0"?>
 <package>
-  <name>usb_cam</name>
+  <name>tiny_usb_cam</name>
   <version>0.0.0</version>
-  <description>The camera package</description>
+  <description>A tiny USB camera package</description>
 
   <!-- One maintainer tag required, multiple allowed, one person per tag -->
-  <maintainer email="apostolos.georgiadis@nfiniity.com">Apostolos Georgiadis</maintainer>
+  <maintainer email="apostolos.georgiadis@gmx.ch">Apostolos Georgiadis</maintainer>
 
 
   <!-- One license tag required, multiple allowed, one license per tag -->
