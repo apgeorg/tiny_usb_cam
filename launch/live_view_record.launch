@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <launch>
-    <node pkg="usb_cam" type="live_view_node.py" name="live_view_node" output="screen"/>
+    <node pkg="tiny_usb_cam" type="live_view.py" name="live_view" output="screen"/>
     <node pkg="image_view" type="video_recorder" name="video_recorder" output="screen">
     	<remap from="image" to="/camera/rgb/image"/> 	
     </node>

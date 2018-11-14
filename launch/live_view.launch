@@ -1,0 +1,7 @@
+<?xml version="1.0"?>
+<launch>
+    <node pkg="tiny_usb_cam" type="live_view.py" name="live_view" output="screen"/>
+    <node pkg="rqt_image_view" type="rqt_image_view" name="rqt_image_view">
+    	<remap from="image" to="/camera/rgb/image"/> 
+    </node>
+</launch>

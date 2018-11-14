@@ -29,7 +29,7 @@ class UsbCam(object):
 
     def start_video_recording(self, filename="output.avi", fps=30.0, resolution=(640, 480)):
         with self.lock:
-            self.video_recorder = cv2.VideoWriter(filename, cv2.VideoWriter_fourcc('M','J','P','G'), fps, resolution)
+            self.video_recorder = cv2.VideoWriter(filename, cv2.VideoWriter_fourcc('X','V','I','D'), fps, resolution)
             self.video_recording_active = True
 
     def stop_video_recording(self):
@@ -50,8 +50,6 @@ class UsbCam(object):
             return
         ret, frame = self.camera.read()
         #image_rgb = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
-        if self.video_recording_active:
-            self.write(frame)
         return frame
 
     def close(self):

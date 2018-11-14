@@ -8,7 +8,8 @@ from usbcam.usb_cam import UsbCam
 
 class LiveView(object):
     def __init__(self, device, topic_name, rate):
-        rospy.init_node("live_view_node")
+        rospy.init_node("live_view")
+        rospy.loginfo('LiveView started...')
         self.image_pub = rospy.Publisher(topic_name, Image, queue_size=10)
         self.camera = UsbCam(device)
         self.bridge = CvBridge()
