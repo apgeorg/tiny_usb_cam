@@ -4,9 +4,11 @@ import cv2
 import threading
 
 class UsbCam(object):
-    def __init__(self, device):
+    def __init__(self, device, fps=30, width=640, height=480):
         self.device = device
         self.camera = cv2.VideoCapture(self.device)
+        self.set_resolution(width, height)
+        self.set_fps(fps)
         self.video_recorder = None
         self.lock = threading.Lock()
 
@@ -24,9 +26,9 @@ class UsbCam(object):
             print("Unable to write camera feed")
             return False
 
-    def start_video_recording(self, filename="output.avi", fps=30.0, resolution=(640, 480)):
+    def start_video_recording(self, filename="output.avi"):
         with self.lock:
-            self.video_recorder = cv2.VideoWriter(filename, cv2.VideoWriter_fourcc('X','V','I','D'), fps, resolution)
+            self.video_recorder = cv2.VideoWriter(filename, cv2.VideoWriter_fourcc('X','V','I','D'), self.get_fps(), self.get_resolution())
 
     def stop_video_recording(self):
         with self.lock:
@@ -56,3 +58,13 @@ class UsbCam(object):
         width = int(self.camera.get(cv2.CAP_PROP_FRAME_WIDTH))
         height = int(self.camera.get(cv2.CAP_PROP_FRAME_HEIGHT))
         return (width, height)
+
+    def set_resolution(self, width, height):
+        self.camera.set(cv2.CAP_PROP_FRAME_WIDTH, width)
+        self.camera.set(cv2.CAP_PROP_FRAME_HEIGHT, height)
+
+    def get_fps(self):
+        return self.camera.get(cv2.CAP_PROP_FPS)
+
+    def set_fps(self, fps):
+        self.camera.set(cv2.CAP_PROP_FPS, fps)
