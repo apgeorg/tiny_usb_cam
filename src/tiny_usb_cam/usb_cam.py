@@ -7,10 +7,7 @@ class UsbCam(object):
     def __init__(self, device):
         self.device = device
         self.camera = cv2.VideoCapture(self.device)
-        self.width = int(self.camera.get(cv2.CAP_PROP_FRAME_WIDTH))
-        self.height = int(self.camera.get(cv2.CAP_PROP_FRAME_HEIGHT))
         self.video_recorder = None
-        self.video_recording_active = False
         self.lock = threading.Lock()
 
     def is_camera_opened(self):
@@ -30,14 +27,12 @@ class UsbCam(object):
     def start_video_recording(self, filename="output.avi", fps=30.0, resolution=(640, 480)):
         with self.lock:
             self.video_recorder = cv2.VideoWriter(filename, cv2.VideoWriter_fourcc('X','V','I','D'), fps, resolution)
-            self.video_recording_active = True
 
     def stop_video_recording(self):
         with self.lock:
             if not self.is_video_recorder_opened():
                 return
             self.video_recorder.release()
-            self.video_recording_active = False
 
     def write(self, frame):
         with self.lock:
@@ -49,7 +44,6 @@ class UsbCam(object):
         if not self.is_camera_opened():
             return
         ret, frame = self.camera.read()
-        #image_rgb = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
         return frame
 
     def close(self):
@@ -59,4 +53,6 @@ class UsbCam(object):
             self.camera.release()
 
     def get_resolution(self):
-        return (self.width, self.height)
+        width = int(self.camera.get(cv2.CAP_PROP_FRAME_WIDTH))
+        height = int(self.camera.get(cv2.CAP_PROP_FRAME_HEIGHT))
+        return (width, height)
