@@ -15,16 +15,12 @@ class UsbCam(object):
     def is_camera_opened(self):
         if self.camera and self.camera.isOpened():
             return True
-        else:
-            print("Unable to read camera feed")
-            return False
+        return False
 
     def is_video_recorder_opened(self):
         if self.video_recorder and self.video_recorder.isOpened():
             return True
-        else:
-            print("Unable to write camera feed")
-            return False
+        return False
 
     def start_video_recording(self, filename="output.avi"):
         with self.lock:
