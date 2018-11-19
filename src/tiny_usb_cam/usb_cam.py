@@ -28,7 +28,7 @@ class UsbCam(object):
 
     def start_video_recording(self, filename="output.avi"):
         with self.lock:
-            self.video_recorder = cv2.VideoWriter(filename, cv2.VideoWriter_fourcc('X','V','I','D'), self.get_fps(), self.get_resolution())
+            self.video_recorder = cv2.VideoWriter(filename, cv2.VideoWriter_fourcc('X','2','6','4'), self.get_fps(), self.get_resolution())
 
     def stop_video_recording(self):
         with self.lock:
@@ -46,6 +46,8 @@ class UsbCam(object):
         if not self.is_camera_opened():
             return
         ret, frame = self.camera.read()
+        if not ret:
+            return None
         return frame
 
     def close(self):
