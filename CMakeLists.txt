@@ -13,3 +13,12 @@ catkin_python_setup()
 
 catkin_package()
 
+file(GLOB python_scripts_DIR
+  "scripts/*.py"
+)
+
+install(DIRECTORY launch
+  DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION})
+ 
+catkin_install_python(PROGRAMS ${python_scripts_DIR}
+  DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION})
